@@ -38,7 +38,7 @@ BitSet *BitSet_new(int index_lo, int index_hi){
 	set_ptr->index_hi = index_hi;
 	set_ptr->size = index_hi - index_lo + 1;
 	// Round up
-	set_ptr->len_array = ( sizeof(unsigned) - 1 + set_ptr->size ) / sizeof(unsigned);
+	set_ptr->len_array = ( (8*sizeof(unsigned)) - 1 + set_ptr->size ) / (8*sizeof(unsigned));
 	
 	set_ptr->array = malloc( sizeof(unsigned) * set_ptr->len_array );
 	memset(set_ptr->array, 0, sizeof(unsigned) * set_ptr->len_array );
@@ -71,22 +71,22 @@ void BitSet_destroy(BitSet *set_ptr){
 ///////////////////////////
 
 void BitSet_set_bit(BitSet *set_ptr, int index){
-	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
-	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
+	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
+	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
 	set_ptr->array[i] |= 1u << j;
 }
 
 void BitSet_clear_bit(BitSet *set_ptr, int index){
-	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
-	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
+	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
+	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
 	set_ptr->array[i] &= ~(1u << j);
 }
 
 void BitSet_toggle_bit(BitSet *set_ptr, int index){
-	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
-	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
+	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
+	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
 	set_ptr->array[i] ^= 1u << j;
 }
@@ -153,22 +153,40 @@ void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr){
 //////////////
 
 int BitSet_get_bit(BitSet *set_ptr, int index){
-	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
-	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
+	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
+	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
 	return (set_ptr->array[i] >> j ) & 1u; 
 }
 
 int BitSet_get_any(BitSet *set_ptr){
-	for (int i = 0; i < set_ptr->len_array; ++i)
+	int i;
+	for (i = 0; i < set_ptr->size / (8*sizeof(unsigned)); ++i)
 		if(set_ptr->array[i] != 0u)
 			return 1;
+
+	int j = set_ptr->size % (8*sizeof(unsigned));
+	if(j){
+		int check = (~(-1<<j))&set_ptr->array[i];
+		if(check != 0)
+			return 1;
+	}
+
 	return 0;
 }
 
 int BitSet_get_all(BitSet *set_ptr){
-	for (int i = 0; i < set_ptr->len_array; ++i)
-		if(set_ptr->array[i] != ~0u)
+	int i;
+	for (int i = 0; i < set_ptr->size / (8*sizeof(unsigned)); ++i)
+		if(set_ptr->array[i] != -1)
 			return 0;
+
+	int j = set_ptr->size % (8*sizeof(unsigned));
+	if(j){
+		int check = (-1<<j)|set_ptr->array[i];
+		if(check != -1)
+			return 0;
+	}
+
 	return 1;
 }
