@@ -40,7 +40,8 @@ BitSet *BitSet_new(int index_lo, int index_hi){
 	// Round up
 	set_ptr->len_array = ( sizeof(unsigned) - 1 + set_ptr->size ) / sizeof(unsigned);
 	
-	set_ptr->array = malloc( set_ptr->len_array );
+	set_ptr->array = malloc( sizeof(unsigned) * set_ptr->len_array );
+	memset(set_ptr->array, 0, sizeof(unsigned) * set_ptr->len_array );
 
 	return set_ptr;
 }
@@ -53,7 +54,7 @@ BitSet *BitSet_clone(BitSet *set_ptr){
 	clone_set_ptr->size = set_ptr->size;
 	clone_set_ptr->len_array = set_ptr->len_array;
 
-	clone_set_ptr->array = malloc( clone_set_ptr->len_array * sizeof(unsigned) );
+	clone_set_ptr->array = malloc( sizeof(unsigned) * clone_set_ptr->len_array );
 	memcpy(clone_set_ptr->array, set_ptr->array, clone_set_ptr->len_array * sizeof(unsigned) );
 
 	return clone_set_ptr;
@@ -137,7 +138,7 @@ void BitSet_xor(BitSet *base_set_ptr, BitSet *other_set_ptr){
 	}
 }
 
-void BitSet_difference(BitSet *base_set_ptr, BitSet *other_set_ptr){
+void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr){
 	if(!compatibility_check(base_set_ptr, other_set_ptr))
 		return;
 	for (int i = 0; i < base_set_ptr->len_array; ++i)
