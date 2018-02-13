@@ -63,7 +63,7 @@ void BitSet_or(BitSet *base_set_ptr, BitSet *other_set_ptr);
 
 void BitSet_xor(BitSet *base_set_ptr, BitSet *other_set_ptr);
 
-void BitSet_difference(BitSet *base_set_ptr, BitSet *other_set_ptr);
+void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr);
 
 
 //////////////
