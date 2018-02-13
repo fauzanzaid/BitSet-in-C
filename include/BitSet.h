@@ -40,11 +40,11 @@ void BitSet_destroy(BitSet *set_ptr);
 // Operate on single set //
 ///////////////////////////
 
-void BitSet_set_index(BitSet *set_ptr, int index);
+void BitSet_set_bit(BitSet *set_ptr, int index);
 
-void BitSet_clear_index(BitSet *set_ptr, int index);
+void BitSet_clear_bit(BitSet *set_ptr, int index);
 
-void BitSet_toggle_index(BitSet *set_ptr, int index);
+void BitSet_toggle_bit(BitSet *set_ptr, int index);
 
 void BitSet_set_all(BitSet *set_ptr);
 
@@ -70,7 +70,7 @@ void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr);
 // Retrieve //
 //////////////
 
-int BitSet_get_index(BitSet *set_ptr, int index);
+int BitSet_get_bit(BitSet *set_ptr, int index);
 
 /**
  * Check if any element is set to 1

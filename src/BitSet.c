@@ -70,21 +70,21 @@ void BitSet_destroy(BitSet *set_ptr){
 // Operate on single set //
 ///////////////////////////
 
-void BitSet_set_index(BitSet *set_ptr, int index){
+void BitSet_set_bit(BitSet *set_ptr, int index){
 	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
 	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
 	set_ptr->array[i] |= 1u << j;
 }
 
-void BitSet_clear_index(BitSet *set_ptr, int index){
+void BitSet_clear_bit(BitSet *set_ptr, int index){
 	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
 	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
 	set_ptr->array[i] &= ~(1u << j);
 }
 
-void BitSet_toggle_index(BitSet *set_ptr, int index){
+void BitSet_toggle_bit(BitSet *set_ptr, int index){
 	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
 	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
@@ -152,7 +152,7 @@ void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr){
 // Retrieve //
 //////////////
 
-int BitSet_get_index(BitSet *set_ptr, int index){
+int BitSet_get_bit(BitSet *set_ptr, int index){
 	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
 	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
