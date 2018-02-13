@@ -40,13 +40,17 @@ void BitSet_destroy(BitSet *set_ptr);
 // Operate on single set //
 ///////////////////////////
 
-void BitSet_set_index(BitSet *set_ptr, int index, int value);
+void BitSet_set_index(BitSet *set_ptr, int index);
 
-void BitSet_flip_index(BitSet *set_ptr, int index);
+void BitSet_clear_index(BitSet *set_ptr, int index);
 
-void BitSet_set_all(BitSet *set_ptr, int value);
+void BitSet_toggle_index(BitSet *set_ptr, int index);
 
-void BitSet_not(BitSet *set_ptr);
+void BitSet_set_all(BitSet *set_ptr);
+
+void BitSet_clear_all(BitSet *set_ptr);
+
+void BitSet_toggle_all(BitSet *set_ptr);
 
 
 /////////////////////////
