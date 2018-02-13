@@ -15,6 +15,18 @@ typedef struct BitSet {
 } BitSet;
 
 
+///////////////////////
+// Private functions //
+///////////////////////
+
+static int compatibility_check(BitSet *set1_ptr, BitSet *set2_ptr){
+	if(set1_ptr->index_lo == set2_ptr->index_lo &&
+		set1_ptr->index_hi == set2_ptr->index_hi)
+		return 1;
+	return 0;
+}
+
+
 //////////////////////////////////
 // Constructors and Destructors //
 //////////////////////////////////
@@ -57,20 +69,40 @@ void BitSet_destroy(BitSet *set_ptr){
 // Operate on single set //
 ///////////////////////////
 
-void BitSet_set_index(BitSet *set_ptr, int index, int value){
+void BitSet_set_index(BitSet *set_ptr, int index){
+	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
+	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
+	set_ptr->array[i] |= 1u << j;
 }
 
-void BitSet_flip_index(BitSet *set_ptr, int index){
+void BitSet_clear_index(BitSet *set_ptr, int index){
+	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
+	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
+	set_ptr->array[i] &= ~(1u << j);
 }
 
-void BitSet_set_all(BitSet *set_ptr, int value){
+void BitSet_toggle_index(BitSet *set_ptr, int index){
+	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
+	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
+	set_ptr->array[i] ^= 1u << j;
 }
 
-void BitSet_not(BitSet *set_ptr){
+void BitSet_set_all(BitSet *set_ptr){
+	memset(set_ptr->array, -1, sizeof(unsigned) * set_ptr->len_array );
+}
 
+void BitSet_clear_all(BitSet *set_ptr){
+	memset(set_ptr->array, 0, sizeof(unsigned) * set_ptr->len_array );
+}
+
+void BitSet_toggle_all(BitSet *set_ptr){
+	for (int i = 0; i < set_ptr->len_array; ++i)
+	{
+		set_ptr->array[i] ^= -1;
+	}
 }
 
 
@@ -79,19 +111,39 @@ void BitSet_not(BitSet *set_ptr){
 /////////////////////////
 
 void BitSet_and(BitSet *base_set_ptr, BitSet *other_set_ptr){
-
+	if(!compatibility_check(base_set_ptr, other_set_ptr))
+		return;
+	for (int i = 0; i < base_set_ptr->len_array; ++i)
+	{
+		base_set_ptr->array[i] &= other_set_ptr->array[i];
+	}
 }
 
 void BitSet_or(BitSet *base_set_ptr, BitSet *other_set_ptr){
-
+	if(!compatibility_check(base_set_ptr, other_set_ptr))
+		return;
+	for (int i = 0; i < base_set_ptr->len_array; ++i)
+	{
+		base_set_ptr->array[i] |= other_set_ptr->array[i];
+	}
 }
 
 void BitSet_xor(BitSet *base_set_ptr, BitSet *other_set_ptr){
-
+	if(!compatibility_check(base_set_ptr, other_set_ptr))
+		return;
+	for (int i = 0; i < base_set_ptr->len_array; ++i)
+	{
+		base_set_ptr->array[i] ^= other_set_ptr->array[i];
+	}
 }
 
 void BitSet_difference(BitSet *base_set_ptr, BitSet *other_set_ptr){
-
+	if(!compatibility_check(base_set_ptr, other_set_ptr))
+		return;
+	for (int i = 0; i < base_set_ptr->len_array; ++i)
+	{
+		base_set_ptr->array[i] &= ~other_set_ptr->array[i];
+	}
 }
 
 
@@ -100,13 +152,22 @@ void BitSet_difference(BitSet *base_set_ptr, BitSet *other_set_ptr){
 //////////////
 
 int BitSet_get_index(BitSet *set_ptr, int index){
+	int i = (index - set_ptr->index_lo) / sizeof(unsigned);
+	int j = (index - set_ptr->index_lo) % sizeof(unsigned);
 
+	return (set_ptr->array[i] >> j ) & 1u; 
 }
 
 int BitSet_get_any(BitSet *set_ptr){
-
+	for (int i = 0; i < set_ptr->len_array; ++i)
+		if(set_ptr->array[i] != 0u)
+			return 1;
+	return 0;
 }
 
 int BitSet_get_all(BitSet *set_ptr){
-
+	for (int i = 0; i < set_ptr->len_array; ++i)
+		if(set_ptr->array[i] != ~0u)
+			return 0;
+	return 1;
 }
