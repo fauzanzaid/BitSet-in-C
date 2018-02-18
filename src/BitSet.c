@@ -198,11 +198,7 @@ int BitSet_get_all(BitSet *set_ptr){
 			return 0;
 
 	int j = set_ptr->size % (8*sizeof(unsigned));
-	if(j){rLL1_new : psr at        %p\n", psr_ptr);
-	// printf("ParserLL1_new : rule table at %p\n", psr_ptr->rule_table);
-	// printf("ParserLL1_new : null set at   %p\n", psr_ptr->nullable_set);
-	// printf("ParserLL1_new : follow at     %p\n", psr_ptr->follow_table);
-	// printf("Parse
+	if(j){
 		int check = (-1<<j)|set_ptr->array[i];
 		if(check != -1)
 			return 0;
