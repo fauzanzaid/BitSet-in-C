@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "BitSet.h"
@@ -24,6 +25,13 @@ static int compatibility_check(BitSet *set1_ptr, BitSet *set2_ptr){
 		set1_ptr->index_hi == set2_ptr->index_hi)
 		return 1;
 	return 0;
+}
+
+static void index_check(BitSet *set_ptr, int index){
+	if(index < set_ptr->index_lo || index > set_ptr->index_hi){
+		fprintf(stderr, "BitSet : index %d out of range [%d,%d]\n", index, set_ptr->index_lo, set_ptr->index_hi);
+		exit(1);
+	}
 }
 
 
@@ -71,6 +79,8 @@ void BitSet_destroy(BitSet *set_ptr){
 ///////////////////////////
 
 void BitSet_set_bit(BitSet *set_ptr, int index){
+	index_check(set_ptr, index);
+
 	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
 	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
@@ -78,6 +88,8 @@ void BitSet_set_bit(BitSet *set_ptr, int index){
 }
 
 void BitSet_clear_bit(BitSet *set_ptr, int index){
+	index_check(set_ptr, index);
+
 	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
 	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
@@ -85,6 +97,8 @@ void BitSet_clear_bit(BitSet *set_ptr, int index){
 }
 
 void BitSet_toggle_bit(BitSet *set_ptr, int index){
+	index_check(set_ptr, index);
+
 	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
 	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
@@ -153,6 +167,8 @@ void BitSet_subtract(BitSet *base_set_ptr, BitSet *other_set_ptr){
 //////////////
 
 int BitSet_get_bit(BitSet *set_ptr, int index){
+	index_check(set_ptr, index);
+
 	int i = (index - set_ptr->index_lo) / (8*sizeof(unsigned));
 	int j = (index - set_ptr->index_lo) % (8*sizeof(unsigned));
 
@@ -182,7 +198,11 @@ int BitSet_get_all(BitSet *set_ptr){
 			return 0;
 
 	int j = set_ptr->size % (8*sizeof(unsigned));
-	if(j){
+	if(j){rLL1_new : psr at        %p\n", psr_ptr);
+	// printf("ParserLL1_new : rule table at %p\n", psr_ptr->rule_table);
+	// printf("ParserLL1_new : null set at   %p\n", psr_ptr->nullable_set);
+	// printf("ParserLL1_new : follow at     %p\n", psr_ptr->follow_table);
+	// printf("Parse
 		int check = (-1<<j)|set_ptr->array[i];
 		if(check != -1)
 			return 0;
