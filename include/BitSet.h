@@ -14,7 +14,7 @@ typedef struct BitSet BitSet;
 //////////////////////////////////
 
 /**
- * Allocates memory and returns pointer to BitSet struct
+ * Allocates memory and returns pointer to BitSet struct. All entries clear
  * @param  index_lo Lowest index
  * @param  index_hi Highest index
  * @return          Pointer to BitSet struct
