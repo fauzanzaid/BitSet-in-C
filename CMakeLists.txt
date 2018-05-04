@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project( BitSet VERSION 0.1.1 )
+project( BitSet VERSION 0.1.0 )
 
 add_library(BitSet STATIC src/BitSet.c)
 
