@@ -1,5 +1,5 @@
-# BitSet-in-C
-An implementation of Bit set or Bit arrays in C.
+# BitSet in C
+An implementation of bit sets in C.
 
 ### Building
 To build the static library,  run the following commands from the terminal:
@@ -11,4 +11,4 @@ This will build ```libBitSet.a``` in ```./bin``` directory.
 ### Usage
 Include ```BitSet.h``` in the source file and link to ```libBitSet.a``` while compiling the source file.
 
-Check header file for information about functions provided by this module.
+See ```include/BitsSet.h``` for information about functionality provided by this module.
